@@ -1,20 +1,17 @@
 using System;
 using UnityEngine;
+using UnityEngine.Splines;
 
 public class PlayerController : MonoBehaviour
 {
-    private Rigidbody p_Body;
-
     [SerializeField] private EnvironmentManager envManager;
+    [SerializeField] private Transform[] wheels;
+
     [SerializeField] private float movementMultiplier = 1f;
     [SerializeField] private float autoForce = 1f;
+    [SerializeField] private float maxSpinSpeed = 360f;
+
     private float movementValues;
-
-
-    private void Awake()
-    {
-        p_Body = GetComponent<Rigidbody>();
-    }
 
     private void OnEnable()
     {
@@ -36,7 +33,20 @@ public class PlayerController : MonoBehaviour
     
     void Update()
     {
-        MovePlayer();   
+        MovePlayer();
+        RotateWheels();
+    }
+
+    private void RotateWheels()
+    {
+        if (wheels == null) return;
+
+        //float spinRate = Mathf.Lerp(0f, maxSpinSpeed, spline.MaxSpeed / environmentSpeed);
+        float deltaAngle = maxSpinSpeed * Time.deltaTime;
+        foreach (var w in wheels)
+        {
+            w.Rotate(-deltaAngle, 0f, 0f, Space.Self);
+        }
     }
 
     private void OnTriggerExit(Collider other)
