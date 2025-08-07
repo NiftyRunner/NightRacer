@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.Splines;
+using UnityEngine.Windows;
 
 public class PlayerController : MonoBehaviour
 {
@@ -10,6 +11,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float movementMultiplier = 1f;
     [SerializeField] private float autoForce = 1f;
     [SerializeField] private float maxSpinSpeed = 360f;
+
+    [Header("Tilt Values")]
+    [SerializeField] private Transform bikeTiltTransform;
+    [SerializeField] private float baseXAngle = 90f;
+    [SerializeField] private float maxTiltDelta = 10f;
+    [SerializeField] private float tiltSpeed = 120f;
 
     private float movementValues;
 
@@ -28,13 +35,13 @@ public class PlayerController : MonoBehaviour
     private void PlayerControlHandler_OnLRValueChange(float inputValues)
     {
         movementValues = inputValues;
-        Debug.Log(movementValues);
     }
     
     void Update()
     {
         MovePlayer();
         RotateWheels();
+        TiltPlayer();
     }
 
     private void RotateWheels()
@@ -65,6 +72,22 @@ public class PlayerController : MonoBehaviour
         
         transform.Translate(movementForce, Space.World);
         //p_Body.AddForce(movementForce, ForceMode.Force);
+    }
+
+    private void TiltPlayer()
+    {
+        Debug.Log("Tilting: " + bikeTiltTransform.name);
+        float targetX = baseXAngle + movementValues * maxTiltDelta;
+        float currentX = bikeTiltTransform.localEulerAngles.x;
+        float newX = Mathf.MoveTowardsAngle(
+            currentX,
+            targetX,
+            tiltSpeed * Time.deltaTime
+        );
+
+        Vector3 e = bikeTiltTransform.localEulerAngles;
+        e.x = newX;
+        bikeTiltTransform.localEulerAngles = e;
     }
 
     private void DollyDrive_OnDollyFinished()
