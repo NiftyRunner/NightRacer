@@ -6,6 +6,9 @@ TagManager:
   tags:
   - CinemachineTarget
   - NextSeg
+  - Obstacle
+  - Right
+  - Left
   layers:
   - Default
   - TransparentFX
