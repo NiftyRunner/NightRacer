@@ -32,33 +32,34 @@ public class SceneLoader : MonoBehaviour
 
     private System.Collections.IEnumerator LoadSceneWithFade(string nextScene)
     {
-        isLoading = true;
+            isLoading = true;
 
-        // Fade in to black
-        fader.FadeIn(fadeDuration);
-        yield return new WaitForSeconds(fadeDuration);
+            // Fade in to black
+            fader.FadeIn(fadeDuration);
+            yield return new WaitForSeconds(fadeDuration);
 
-        // Load the next scene
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(nextScene);
-        asyncLoad.allowSceneActivation = false;
+            // Load the next scene
+            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(nextScene);
+            asyncLoad.allowSceneActivation = false;
 
-        // Wait one frame so the scene is loaded
-        while (asyncLoad.progress < 0.9f)
+            // Wait one frame so the scene is loaded
+            while (asyncLoad.progress < 0.9f)
+            {
+                yield return null;
+            }
+
+
+
+        asyncLoad.allowSceneActivation = true;
+
+        fader.FadeOut(fadeDuration);
+
+        while (!asyncLoad.isDone)
         {
             yield return null;
         }
+        
 
-        fader.FadeOut(fadeDuration);
-        asyncLoad.allowSceneActivation = true;
-
-        yield return null;
-
-        //// Fade out to reveal the new scene
-        //UIFader newFader = FindFirstObjectByType<UIFader>();
-        //if (newFader != null)
-        //{
-        //    newFader.InstantFadeIn();
-        //    newFader.FadeOut(fadeDuration);
-        //}
+        
     }
 }

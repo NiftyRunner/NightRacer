@@ -76,8 +76,8 @@ public class PlayerController : MonoBehaviour
 
     private void TiltPlayer()
     {
-        Debug.Log("Tilting: " + bikeTiltTransform.name);
-        float targetX = baseXAngle + movementValues * maxTiltDelta;
+        float targetX = baseXAngle - movementValues * maxTiltDelta;
+        Debug.Log(targetX);
         float currentX = bikeTiltTransform.localEulerAngles.x;
         float newX = Mathf.MoveTowardsAngle(
             currentX,

@@ -39,9 +39,7 @@ public class PlayerControlHandler : MonoBehaviour
 
     private void LR_performed(InputAction.CallbackContext obj)
     {
-        Debug.Log("Lr performed");
         float inputValues = obj.ReadValue<float>();
-        Debug.Log(inputValues);
         OnLRValueChange?.Invoke(inputValues);
     }
     private void LR_canceled(InputAction.CallbackContext obj)

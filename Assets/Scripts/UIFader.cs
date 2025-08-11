@@ -4,11 +4,21 @@ using System.Collections;
 
 public class UIFader : MonoBehaviour
 {
+    public static UIFader Instance;
     private CanvasGroup canvasGroup;
     private SpriteRenderer spriteRenderer;
 
     private void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject); // Kill the duplicate
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
         // Try to find CanvasGroup and SpriteRenderer on this GameObject
         canvasGroup = GetComponent<CanvasGroup>();
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -18,6 +28,8 @@ public class UIFader : MonoBehaviour
             Debug.LogError("FadeInOut requires either a CanvasGroup or SpriteRenderer component.");
             enabled = false;
         }
+
+
     }
 
     /// <summary>
