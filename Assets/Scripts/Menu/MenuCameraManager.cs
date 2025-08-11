@@ -2,12 +2,16 @@ using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MenuCameraManager : MonoBehaviour
 {
+
     [SerializeField] private List<CinemachineVirtualCamera>  _virtualCameras = new List<CinemachineVirtualCamera>();
     [SerializeField] private List<GameObject> texts = new List<GameObject>();
+    [SerializeField] SceneLoader loader;
 
+    [SerializeField] string sceneToLoad;
     private GameObject currText;
     private GameObject nextText;
     private CinemachineVirtualCamera currVirtualCam;
@@ -20,12 +24,14 @@ public class MenuCameraManager : MonoBehaviour
 
     private void OnEnable()
     {
+        PlayerControlHandler.OnEnterPressed += PlayerControlHandler_OnEnterPressed;
         PlayerControlHandler.OnLRValueChange += PlayerControlHandler_OnLRValueChange;
         DollyDrive.OnDollyFinished += DollyDrive_OnDollyFinished;
     }
 
     private void OnDisable()
     {
+        PlayerControlHandler.OnEnterPressed -= PlayerControlHandler_OnEnterPressed;
         PlayerControlHandler.OnLRValueChange -= PlayerControlHandler_OnLRValueChange;
         DollyDrive.OnDollyFinished -= DollyDrive_OnDollyFinished;
     }
@@ -67,6 +73,14 @@ public class MenuCameraManager : MonoBehaviour
         inputEnabled = false;
         yield return new WaitForSeconds(1);
         inputEnabled = true;
+    }
+
+    private void PlayerControlHandler_OnEnterPressed()
+    {
+        if(_virtualCameraIndex == 0 && inputEnabled)
+        {
+            loader.CallLoadCoroutine(sceneToLoad);
+        }
     }
 
     private void PlayerControlHandler_OnLRValueChange(float obj)

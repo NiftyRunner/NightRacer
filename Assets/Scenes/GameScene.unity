@@ -93,7 +93,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000000, guid: b6e2c97a61541554684ba4b95c36a0ae, type: 2}
+  m_LightingDataAsset: {fileID: 112000000, guid: 048471c24b3c1234e919febdce2899fa, type: 2}
   m_LightingSettings: {fileID: 4890085278179872738, guid: d97b425c42fb94bd6b9c9ed101dc4078, type: 2}
 --- !u!196 &4
 NavMeshSettings:
@@ -131,6 +131,7 @@ GameObject:
   - component: {fileID: 14598283}
   - component: {fileID: 14598285}
   - component: {fileID: 14598286}
+  - component: {fileID: 14598287}
   m_Layer: 0
   m_Name: VCam_Spline
   m_TagString: Untagged
@@ -185,7 +186,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 14598281}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.08810723, y: -0.16043665, z: -0.060595438, w: 0.98123664}
+  m_LocalRotation: {x: 0.49955523, y: 0.46796098, z: -0.37334585, w: 0.62615496}
   m_LocalPosition: {x: -3.9465594, y: 15.188726, z: 18.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -226,6 +227,23 @@ MonoBehaviour:
   vcamSpline: {fileID: 14598283}
   vcamPlayer: {fileID: 950117418}
   blendDuration: 1.5
+--- !u!114 &14598287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 14598281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 449ef5ebbe24720439ec31d15f7b6f3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FocusTracksTarget: 0
+  m_FocusTracking: 0
+  m_FocusTarget: {fileID: 0}
+  m_FocusOffset: 0
+  m_Profile: {fileID: 11400000, guid: 9f7fd31abd3084e47a1c12773662aea4, type: 2}
 --- !u!1 &53942369
 GameObject:
   m_ObjectHideFlags: 3
@@ -649,10 +667,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IsGlobal: 1
-  priority: 0
+  priority: 1
   blendDistance: 0
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: 10fc4df2da32a41aaa32d77bc913491c, type: 2}
+  sharedProfile: {fileID: 11400000, guid: 9f7fd31abd3084e47a1c12773662aea4, type: 2}
 --- !u!4 &286700364
 Transform:
   m_ObjectHideFlags: 0
@@ -6690,7 +6708,7 @@ MonoBehaviour:
   m_FocusTracking: 0
   m_FocusTarget: {fileID: 0}
   m_FocusOffset: 0
-  m_Profile: {fileID: 11400000, guid: 10fc4df2da32a41aaa32d77bc913491c, type: 2}
+  m_Profile: {fileID: 11400000, guid: 9f7fd31abd3084e47a1c12773662aea4, type: 2}
 --- !u!114 &950117418
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -7,6 +7,7 @@ public class PlayerControlHandler : MonoBehaviour
     private PlayerControls playerInputActions;
 
     public static event Action<float> OnLRValueChange;
+    public static event Action OnEnterPressed;
 
     private void Awake()
     {
@@ -19,8 +20,8 @@ public class PlayerControlHandler : MonoBehaviour
 
         playerInputActions.Player.LR.performed += LR_performed;
         playerInputActions.Player.LR.canceled += LR_canceled;
+        playerInputActions.Player.Enter.performed += Enter_performed;
     }
-
 
     private void OnDisable()
     {
@@ -28,6 +29,12 @@ public class PlayerControlHandler : MonoBehaviour
 
         playerInputActions.Player.LR.performed -= LR_performed;
         playerInputActions.Player.LR.canceled -= LR_canceled;
+        playerInputActions.Player.Enter.performed -= Enter_performed;
+    }
+
+    private void Enter_performed(InputAction.CallbackContext obj)
+    {
+        OnEnterPressed?.Invoke();
     }
 
     private void LR_performed(InputAction.CallbackContext obj)
