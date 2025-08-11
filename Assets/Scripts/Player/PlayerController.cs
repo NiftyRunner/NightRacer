@@ -13,12 +13,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float maxSpinSpeed = 360f;
 
     [Header("Tilt Values")]
-    [SerializeField] private Transform bikeTiltTransform;
-    [SerializeField] private float baseXAngle = 90f;
-    [SerializeField] private float maxTiltDelta = 10f;
+    [SerializeField] private Animator bikeAnimator;
+    [SerializeField] float maxTilt = 1f;
     [SerializeField] private float tiltSpeed = 120f;
 
     private float movementValues;
+    private float currentTilt;
 
     private void OnEnable()
     {
@@ -76,18 +76,21 @@ public class PlayerController : MonoBehaviour
 
     private void TiltPlayer()
     {
-        float targetX = baseXAngle - movementValues * maxTiltDelta;
-        Debug.Log(targetX);
-        float currentX = bikeTiltTransform.localEulerAngles.x;
-        float newX = Mathf.MoveTowardsAngle(
-            currentX,
-            targetX,
-            tiltSpeed * Time.deltaTime
-        );
+        currentTilt = Mathf.Lerp(currentTilt, movementValues, tiltSpeed * Time.deltaTime);
 
-        Vector3 e = bikeTiltTransform.localEulerAngles;
-        e.x = newX;
-        bikeTiltTransform.localEulerAngles = e;
+        bikeAnimator.SetFloat("Tilt", currentTilt);
+
+        //float targetX = baseXAngle - movementValues * maxTiltDelta;
+
+        //// Create the target rotation from Euler angles
+        //Quaternion targetRot = Quaternion.Euler(targetX, bikeTiltTransform.localEulerAngles.y, bikeTiltTransform.localEulerAngles.z);
+
+        //// Smoothly rotate towards target
+        //bikeTiltTransform.localRotation = Quaternion.Slerp(
+        //    bikeTiltTransform.localRotation,
+        //    targetRot,
+        //    tiltSpeed * Time.deltaTime
+        //);
     }
 
     private void DollyDrive_OnDollyFinished()
