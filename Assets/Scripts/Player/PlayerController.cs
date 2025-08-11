@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Tilt Values")]
     [SerializeField] private Animator bikeAnimator;
+    [SerializeField] private Animator riderAnimator;
     [SerializeField] float maxTilt = 1f;
     [SerializeField] private float tiltSpeed = 120f;
 
@@ -79,6 +80,7 @@ public class PlayerController : MonoBehaviour
         currentTilt = Mathf.Lerp(currentTilt, movementValues, tiltSpeed * Time.deltaTime);
 
         bikeAnimator.SetFloat("Tilt", currentTilt);
+        riderAnimator.SetFloat("Tilt", currentTilt);
 
         //float targetX = baseXAngle - movementValues * maxTiltDelta;
 
