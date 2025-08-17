@@ -16,21 +16,34 @@ public class ObstacleHandler : MonoBehaviour
     [SerializeField] float leftMoveSpeed = 5f;
     [SerializeField] float rightMoveSpeed = 15f;
 
+    private bool spawnEnabled = false;
+
+    private void OnEnable()
+    {
+        CollisionHandlerNew.OnPlayerCollision += CollisionHandlerNew_OnPlayerCollision;
+    }
+
+    private void OnDisable()
+    {
+        CollisionHandlerNew.OnPlayerCollision -= CollisionHandlerNew_OnPlayerCollision;
+    }
+
     void Start()
     {
+        spawnEnabled = true;
         StartCoroutine(SpawnLoop());
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Obstacle") {
+        if (other.gameObject.tag == "Left" || other.gameObject.tag == "Right") {
             objects.ReturnToPool(other.gameObject);
         }
     }
 
     private IEnumerator SpawnLoop()
     {
-        while (true)
+        while (spawnEnabled)
         {
             float nextInterval = Random.Range(minSpawnTime, maxSpawnTime);
             yield return new WaitForSeconds(nextInterval);
@@ -60,11 +73,18 @@ public class ObstacleHandler : MonoBehaviour
         {
             curObjMover.transform.localRotation = spawnPoints[rNumber].localRotation;
             curObjMover.SetAutoForce(leftMoveSpeed);
+            curObjMover.gameObject.tag = "Left";
         }
         else if (spawnPoints[rNumber].CompareTag("Right"))
         {
             curObjMover.transform.localRotation = spawnPoints[rNumber].localRotation;
             curObjMover.SetAutoForce(rightMoveSpeed);
+            curObjMover.gameObject.tag = "Right";
         }
+    }
+
+    private void CollisionHandlerNew_OnPlayerCollision()
+    {
+        spawnEnabled = false;
     }
 }

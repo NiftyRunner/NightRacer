@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using UnityEngine;
 
 public class ObjectMover : MonoBehaviour
@@ -18,16 +20,18 @@ public class ObjectMover : MonoBehaviour
     private void OnEnable()
     {
         DollyDrive.OnDollyFinished += DollyDrive_OnDollyFinished;
+        CollisionHandlerNew.OnPlayerCollision += CollisionHandlerNew_OnPlayerCollision;
     }
 
     private void OnDisable()
     {
         DollyDrive.OnDollyFinished -= DollyDrive_OnDollyFinished;
+        CollisionHandlerNew.OnPlayerCollision -= CollisionHandlerNew_OnPlayerCollision;
     }
 
     private void Start()
     {
-        if(this.gameObject.CompareTag("Obstacle"))
+        if(this.gameObject.CompareTag("Left") || this.gameObject.CompareTag("Right"))
         {
             isObstacle = true;
             return;
@@ -40,15 +44,38 @@ public class ObjectMover : MonoBehaviour
     {
         if(!movementEnabled) return;
 
-        if (isObstacle) { RotateWheels(); }
+        if (isObstacle && !(autoForce == 0)) { RotateWheels(); }
 
-        MoveEnvironment();   
+        MoveObject();   
     }
 
-    private void MoveEnvironment()
+    private void MoveObject()
     {
         Vector3 movementValues = new Vector3(0, 0, -autoForce * Time.deltaTime);
         transform.Translate(movementValues, Space.World);
+    }
+
+    private void CollisionHandlerNew_OnPlayerCollision()
+    {
+        //autoForce = 0;
+
+        if(!isObstacle) autoForce = 0;
+
+        if (this.gameObject.CompareTag("Left"))
+        {
+            autoForce *= (-1);
+        }
+
+        //StartCoroutine(DisableMovement());
+
+    }
+
+
+    private IEnumerator DisableMovement()
+    {
+        yield return new WaitForSeconds(2f);
+        autoForce = 0;
+        //movementEnabled = false;
     }
 
     private void RotateWheels()

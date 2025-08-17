@@ -21,16 +21,25 @@ public class PlayerController : MonoBehaviour
     private float movementValues;
     private float currentTilt;
 
+    private bool inputEnabled = false;
+
     private void OnEnable()
     {
         PlayerControlHandler.OnLRValueChange += PlayerControlHandler_OnLRValueChange;
         DollyDrive.OnDollyFinished += DollyDrive_OnDollyFinished;
+        CollisionHandlerNew.OnPlayerCollision += CollisionHandlerNew_OnPlayerCollision;
     }
 
     private void OnDisable()
     {
         PlayerControlHandler.OnLRValueChange -= PlayerControlHandler_OnLRValueChange;
         DollyDrive.OnDollyFinished -= DollyDrive_OnDollyFinished;
+        CollisionHandlerNew.OnPlayerCollision -= CollisionHandlerNew_OnPlayerCollision;
+    }
+
+    private void Start()
+    {
+        inputEnabled = true;
     }
 
     private void PlayerControlHandler_OnLRValueChange(float inputValues)
@@ -40,8 +49,8 @@ public class PlayerController : MonoBehaviour
     
     void Update()
     {
-        MovePlayer();
         RotateWheels();
+        MovePlayer();
         TiltPlayer();
     }
 
@@ -67,6 +76,8 @@ public class PlayerController : MonoBehaviour
 
     private void MovePlayer()
     {
+        if(!inputEnabled) movementValues = 0;
+
         Vector3 movementForce = new Vector3(
             movementValues * movementMultiplier * Time.deltaTime, 0, autoForce*Time.deltaTime
             );
@@ -81,18 +92,12 @@ public class PlayerController : MonoBehaviour
 
         bikeAnimator.SetFloat("Tilt", currentTilt);
         riderAnimator.SetFloat("Tilt", currentTilt);
+    }
 
-        //float targetX = baseXAngle - movementValues * maxTiltDelta;
 
-        //// Create the target rotation from Euler angles
-        //Quaternion targetRot = Quaternion.Euler(targetX, bikeTiltTransform.localEulerAngles.y, bikeTiltTransform.localEulerAngles.z);
-
-        //// Smoothly rotate towards target
-        //bikeTiltTransform.localRotation = Quaternion.Slerp(
-        //    bikeTiltTransform.localRotation,
-        //    targetRot,
-        //    tiltSpeed * Time.deltaTime
-        //);
+    private void CollisionHandlerNew_OnPlayerCollision()
+    {
+        inputEnabled = false;
     }
 
     private void DollyDrive_OnDollyFinished()
