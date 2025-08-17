@@ -47,6 +47,7 @@ public class ObstacleHandler : MonoBehaviour
         {
             float nextInterval = Random.Range(minSpawnTime, maxSpawnTime);
             yield return new WaitForSeconds(nextInterval);
+            if (!spawnEnabled) yield return null;
 
             SpawnCar();
         }
@@ -54,6 +55,8 @@ public class ObstacleHandler : MonoBehaviour
 
     private void SpawnCar()
     {
+        if (!spawnEnabled) return;
+
         GameObject currObj = objects.GetCarFromPool();
         if (currObj == null) return;
 
@@ -68,7 +71,7 @@ public class ObstacleHandler : MonoBehaviour
 
     private void SetSpawnSpeed(ObjectMover curObjMover, int rNumber)
     {
-        Debug.Log("SetSpawnSpeedCalled");
+        //Debug.Log("SetSpawnSpeedCalled");
         if (spawnPoints[rNumber].CompareTag("Left"))
         {
             curObjMover.transform.localRotation = spawnPoints[rNumber].localRotation;
