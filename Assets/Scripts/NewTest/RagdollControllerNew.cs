@@ -1,4 +1,5 @@
 using Cinemachine;
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -13,11 +14,16 @@ public class RagdollControllerNew : MonoBehaviour
     [Header("Values")]
     [SerializeField] private float setRagdollForce = 5f;
     [SerializeField] private float ragdollDuration = 2f;
+    [SerializeField] private float initFOV_ragdoll = 42f;
+    [SerializeField] private float finalFOV_ragdoll = 10f;
+    [SerializeField] private float lerpSpeed = 2f;
 
+    private float t = 0f;
     private float ragdollForce;
     private Animator riderAnimator;
 
     private bool ragdollEnabled = false;
+    private bool startZoom = false;
 
     private void OnEnable()
     {
@@ -33,6 +39,9 @@ public class RagdollControllerNew : MonoBehaviour
     {
         ragdollEnabled = false;
         ragdollForce = 0f;
+
+        ragCamera.m_Lens.FieldOfView = initFOV_ragdoll;
+
         riderTransform = rider.GetComponent<Transform>();
         riderAnimator = rider.GetComponent<Animator>();
     }
@@ -42,6 +51,7 @@ public class RagdollControllerNew : MonoBehaviour
         if (!ragdollEnabled) return;
 
         MoveRagdoll();
+        ZoomIntoPlayer();
     }
 
     private void CollisionHandlerNew_OnPlayerCollision()
@@ -70,6 +80,23 @@ public class RagdollControllerNew : MonoBehaviour
 
         ragCamera.Priority = 20;
         playerCamera.Priority = 0;
+
+        startZoom = true;
+        t = 0f;
+    }
+
+    private void ZoomIntoPlayer()
+    {
+        if (startZoom)
+        {
+            t += Time.deltaTime * lerpSpeed;
+            ragCamera.m_Lens.FieldOfView = Mathf.Lerp(initFOV_ragdoll, finalFOV_ragdoll, t);
+
+            if (t >= 1f)
+            {
+                startZoom = false;
+            }
+        }
     }
 
     private void MoveRagdoll()

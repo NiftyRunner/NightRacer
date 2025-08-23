@@ -5,6 +5,8 @@ public class CollisionHandlerNew : MonoBehaviour
 {
     public static event Action OnPlayerCollision;
 
+    [SerializeField] private TweenHandler gameOverTweenHandler;
+
     private RagdollControllerNew ragController;
 
 
@@ -21,6 +23,7 @@ public class CollisionHandlerNew : MonoBehaviour
         if ((collision.gameObject.tag == "Left" || collision.gameObject.tag == "Right") && !collided)
         {
             collided = true;
+            gameOverTweenHandler.PlaySequence();
             OnPlayerCollision?.Invoke();
             ragController.EnableRagdoll(true);
         }
