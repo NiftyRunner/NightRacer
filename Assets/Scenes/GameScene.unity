@@ -527,7 +527,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 116994130}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 405841799}
+        m_TargetAssemblyTypeName: GameOverMenuManager, Assembly-CSharp
+        m_MethodName: RestartGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &116994130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -548,8 +560,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 0}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -1267,6 +1279,68 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8487659723139805920, guid: 76fa5a147af27d349871f88e090b9e1c, type: 3}
   m_PrefabInstance: {fileID: 1920578911}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &405841797
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 405841800}
+  - component: {fileID: 405841799}
+  - component: {fileID: 405841798}
+  m_Layer: 0
+  m_Name: SceneLoadHandler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &405841798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 405841797}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5495aee55a49483409ab0794f2a1a633, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fadeDuration: 1
+  fader: {fileID: 0}
+--- !u!114 &405841799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 405841797}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdd0d9bebb5d4894bbb0e4e345bd8e98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loader: {fileID: 405841798}
+  menuSceneName: MenuScene
+  gameSceneName: GameScene
+--- !u!4 &405841800
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 405841797}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -7649,7 +7723,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 891903373}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 405841799}
+        m_TargetAssemblyTypeName: GameOverMenuManager, Assembly-CSharp
+        m_MethodName: LoadMenu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &891903373
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8713,9 +8799,9 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1529447469}
   - {fileID: 116994128}
   - {fileID: 891903371}
-  - {fileID: 1529447469}
   - {fileID: 556806716}
   - {fileID: 1586159982}
   m_Father: {fileID: 83351477}
@@ -9872,7 +9958,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4934932390228229110, guid: 9b451806f5a67604c97a5b145a606987, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7109098705744586367, guid: 9b451806f5a67604c97a5b145a606987, type: 3}
       propertyPath: m_Pivot.x
@@ -11568,6 +11654,7 @@ SceneRoots:
   - {fileID: 14598284}
   - {fileID: 867199560}
   - {fileID: 1108904760}
-  - {fileID: 1790590280}
   - {fileID: 83351477}
+  - {fileID: 1790590280}
   - {fileID: 1953478866}
+  - {fileID: 405841800}

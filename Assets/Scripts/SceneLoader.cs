@@ -15,11 +15,17 @@ public class SceneLoader : MonoBehaviour
 
     private void Start()
     {
+        
         if (fader != null)
         {
             fader.InstantFadeIn(); // Scene starts fully visible
             fader.FadeOut(fadeDuration); // Fade out from black
         }
+    }
+
+    private void Update()
+    {
+        if(fader == null) fader = FindFirstObjectByType<UIFader>();
     }
 
     public void CallLoadCoroutine(string nextScene)

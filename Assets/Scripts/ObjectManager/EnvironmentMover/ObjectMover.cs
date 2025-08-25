@@ -19,12 +19,14 @@ public class ObjectMover : MonoBehaviour
 
     private void OnEnable()
     {
+        DollyDrive.OnDollyStart += DollyDrive_OnDollyStart;
         DollyDrive.OnDollyFinished += DollyDrive_OnDollyFinished;
         CollisionHandlerNew.OnPlayerCollision += CollisionHandlerNew_OnPlayerCollision;
     }
 
     private void OnDisable()
     {
+        DollyDrive.OnDollyStart -= DollyDrive_OnDollyStart;
         DollyDrive.OnDollyFinished -= DollyDrive_OnDollyFinished;
         CollisionHandlerNew.OnPlayerCollision -= CollisionHandlerNew_OnPlayerCollision;
     }
@@ -37,6 +39,7 @@ public class ObjectMover : MonoBehaviour
             return;
         }
 
+        //movementEnabled = false;
         autoForce = setAutoForce;
     }
 
@@ -88,6 +91,11 @@ public class ObjectMover : MonoBehaviour
         {
             w.Rotate(deltaAngle, 0f, 0f, Space.Self);
         }
+    }
+
+    private void DollyDrive_OnDollyStart()
+    {
+        movementEnabled = false;
     }
 
     private void DollyDrive_OnDollyFinished()

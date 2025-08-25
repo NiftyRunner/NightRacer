@@ -5,6 +5,7 @@ using System;
 public class DollyDrive : MonoBehaviour
 {
     public static event Action OnDollyFinished;
+    public static event Action OnDollyStart;
 
     [Header("Dolly Movement")]
     public float speed = 5f;
@@ -42,6 +43,11 @@ public class DollyDrive : MonoBehaviour
         trackLength = (path is CinemachineSmoothPath smooth)
             ? smooth.PathLength
             : 1f; // if PathUnits = PathUnits.Normalized, length is 1
+    }
+
+    private void Start()
+    {
+        OnDollyStart?.Invoke();
     }
 
     void Update()
