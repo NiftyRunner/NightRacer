@@ -4,16 +4,20 @@ using UnityEngine;
 
 public class ObjectMover : MonoBehaviour
 {
+    private PlayerController playerController;
+
     [SerializeField] private float setAutoForce = 10f;
 
     [Header("Wheel Settings")]
     [SerializeField] private Transform[] wheels;
     [SerializeField] private float wheelSpeed = 360f;
 
-    [SerializeField]
-    private float autoForce;
+    [SerializeField] private float autoForce;
+    
     private bool isObstacle = false;
     private static bool movementEnabled = false;
+
+    
 
     public void SetAutoForce(float force) => autoForce = force;
 
@@ -33,6 +37,8 @@ public class ObjectMover : MonoBehaviour
 
     private void Start()
     {
+        playerController = FindFirstObjectByType<PlayerController>();
+
         if(this.gameObject.CompareTag("Left") || this.gameObject.CompareTag("Right"))
         {
             isObstacle = true;
@@ -54,7 +60,7 @@ public class ObjectMover : MonoBehaviour
 
     private void MoveObject()
     {
-        Vector3 movementValues = new Vector3(0, 0, -autoForce * Time.deltaTime);
+        Vector3 movementValues = new Vector3(0, 0, -(autoForce + playerController.GetPlayerSpeedMultiplier())  * Time.deltaTime);
         transform.Translate(movementValues, Space.World);
     }
 

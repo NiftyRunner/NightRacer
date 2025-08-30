@@ -1,16 +1,76 @@
+using System;
 using UnityEngine;
 
 public class ScoreManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public static event Action<float> OnScoreUpdated; // For updating UI dynamically
+    public static ScoreManager Instance; // Singleton
+
+    [Header("Scoring Settings")]
+    public float distanceMultiplier = 1f;   // Points per unit distance
+    public float nearMissBase = 50f;        // Base points for near miss
+    public float nearMissSpeedMultiplier = 2f; // Extra points based on speed
+    public float overtakeBonus = 100f;      // Bonus for overtaking cars
+
+    private float score = 0f;
+    private float distanceTraveled = 0f;
+
+    private void Awake()
     {
-        
+        // Singleton pattern
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        // Increase score based on distance traveled over time
+        AddDistanceScore(Time.deltaTime);
+    }
+
+    // -------------------------
+    //   SCORE ADDITION METHODS
+    // -------------------------
+
+    public void AddNearMiss(float playerSpeed)
+    {
+        float points = nearMissBase + (playerSpeed * nearMissSpeedMultiplier);
+        AddScore(points);
+    }
+
+    public void AddOvertake()
+    {
+        AddScore(overtakeBonus);
+    }
+
+    public void AddDistanceScore(float deltaTime)
+    {
+        float points = deltaTime * distanceMultiplier;
+        AddScore(points);
+        distanceTraveled += deltaTime;
+    }
+
+    // -------------------------
+    //   CORE ADD SCORE METHOD
+    // -------------------------
+    private void AddScore(float points)
+    {
+        score += points;
+        OnScoreUpdated?.Invoke(score);
+    }
+
+    // -------------------------
+    //   GETTERS
+    // -------------------------
+    public float GetScore()
+    {
+        return score;
+    }
+
+    public void ResetScore()
+    {
+        score = 0f;
+        distanceTraveled = 0f;
+        OnScoreUpdated?.Invoke(score);
     }
 }

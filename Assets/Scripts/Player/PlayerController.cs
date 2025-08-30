@@ -1,7 +1,4 @@
-using System;
 using UnityEngine;
-using UnityEngine.Splines;
-using UnityEngine.Windows;
 
 public class PlayerController : MonoBehaviour
 {
@@ -11,17 +8,24 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float movementMultiplier = 1f;
     [SerializeField] private float autoForce = 1f;
     [SerializeField] private float maxSpinSpeed = 360f;
+    [SerializeField] private float playerSpeedMultiplier = 1f;
 
     [Header("Tilt Values")]
     [SerializeField] private Animator bikeAnimator;
     [SerializeField] private Animator riderAnimator;
-    [SerializeField] float maxTilt = 1f;
     [SerializeField] private float tiltSpeed = 120f;
 
     private float movementValues;
     private float currentTilt;
 
     private bool inputEnabled = false;
+
+    private float playerStartSpeed = 30f;
+    private float playerSpeed;
+
+    public float GetPlayerSpeedMultiplier() => playerSpeedMultiplier;
+    public float GetPlayerSpeed() => playerSpeed;
+
 
     private void OnEnable()
     {
@@ -52,6 +56,9 @@ public class PlayerController : MonoBehaviour
         RotateWheels();
         MovePlayer();
         TiltPlayer();
+
+        playerSpeedMultiplier += Time.deltaTime;
+        playerSpeed = playerSpeedMultiplier + playerStartSpeed;
     }
 
     private void RotateWheels()
