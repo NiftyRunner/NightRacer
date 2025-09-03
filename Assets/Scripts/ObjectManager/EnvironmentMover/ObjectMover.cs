@@ -60,7 +60,7 @@ public class ObjectMover : MonoBehaviour
 
     private void MoveObject()
     {
-        Vector3 movementValues = new Vector3(0, 0, -(autoForce + playerController.GetPlayerSpeedMultiplier())  * Time.deltaTime);
+        Vector3 movementValues = new Vector3(0, 0, -(autoForce * playerController.GetPlayerSpeedMultiplier())  * Time.deltaTime);
         transform.Translate(movementValues, Space.World);
     }
 

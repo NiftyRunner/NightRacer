@@ -15,6 +15,8 @@ public class ScoreManager : MonoBehaviour
     private float score = 0f;
     private float distanceTraveled = 0f;
 
+    private bool isCountingScore;
+
     private void Awake()
     {
         // Singleton pattern
@@ -22,8 +24,30 @@ public class ScoreManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
+    private void OnEnable()
+    {
+        CollisionHandlerNew.OnPlayerCollision += CollisionHandlerNew_OnPlayerCollision;
+    }
+
+    private void OnDisable()
+    {
+        CollisionHandlerNew.OnPlayerCollision -= CollisionHandlerNew_OnPlayerCollision;
+    }
+
+    private void CollisionHandlerNew_OnPlayerCollision()
+    {
+        isCountingScore = false;
+    }
+
+    private void Start()
+    {
+        isCountingScore = true;
+    }
+
     private void Update()
     {
+
+        if (!isCountingScore) return;
         // Increase score based on distance traveled over time
         AddDistanceScore(Time.deltaTime);
     }

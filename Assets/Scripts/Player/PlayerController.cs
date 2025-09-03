@@ -8,7 +8,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float movementMultiplier = 1f;
     [SerializeField] private float autoForce = 1f;
     [SerializeField] private float maxSpinSpeed = 360f;
-    [SerializeField] private float playerSpeedMultiplier = 1f;
+    [SerializeField] private float accelerationRate = 0.2f; // how fast speed ramps up
+    [SerializeField] private float maxSpeedMultiplier = 3f;
 
     [Header("Tilt Values")]
     [SerializeField] private Animator bikeAnimator;
@@ -22,6 +23,7 @@ public class PlayerController : MonoBehaviour
 
     private float playerStartSpeed = 30f;
     private float playerSpeed;
+    private float playerSpeedMultiplier = 1f;
 
     public float GetPlayerSpeedMultiplier() => playerSpeedMultiplier;
     public float GetPlayerSpeed() => playerSpeed;
@@ -57,8 +59,10 @@ public class PlayerController : MonoBehaviour
         MovePlayer();
         TiltPlayer();
 
-        playerSpeedMultiplier += Time.deltaTime;
-        playerSpeed = playerSpeedMultiplier + playerStartSpeed;
+        float targetMultiplier = maxSpeedMultiplier;
+        playerSpeedMultiplier = Mathf.MoveTowards(playerSpeedMultiplier, targetMultiplier, accelerationRate * Time.deltaTime);
+
+        playerSpeed = playerStartSpeed * playerSpeedMultiplier;
     }
 
     private void RotateWheels()

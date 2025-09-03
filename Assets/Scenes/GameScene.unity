@@ -7531,7 +7531,8 @@ MonoBehaviour:
   movementMultiplier: 5
   autoForce: 20
   maxSpinSpeed: 1000
-  playerSpeedMultiplier: 1
+  accelerationRate: 0.2
+  maxSpeedMultiplier: 2
   bikeAnimator: {fileID: 1618796168}
   riderAnimator: {fileID: 1009341130}
   tiltSpeed: 2
