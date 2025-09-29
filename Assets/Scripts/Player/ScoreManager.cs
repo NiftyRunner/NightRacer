@@ -1,10 +1,14 @@
 using System;
+using TMPro;
 using UnityEngine;
 
 public class ScoreManager : MonoBehaviour
 {
     public static event Action<float> OnScoreUpdated; // For updating UI dynamically
     public static ScoreManager Instance; // Singleton
+
+    [Header("References")]
+    [SerializeField] TextMeshProUGUI finalScoreText;
 
     [Header("Scoring Settings")]
     public float distanceMultiplier = 1f;   // Points per unit distance
@@ -37,6 +41,8 @@ public class ScoreManager : MonoBehaviour
     private void CollisionHandlerNew_OnPlayerCollision()
     {
         isCountingScore = false;
+
+        finalScoreText.text = "Score: " + Mathf.RoundToInt(score).ToString(); ;
     }
 
     private void Start()

@@ -434,7 +434,6 @@ MonoBehaviour:
   tweens:
   - {fileID: 1529447472}
   - {fileID: 556806719}
-  - {fileID: 1586159985}
   - {fileID: 116994132}
   - {fileID: 891903375}
   playOnStart: 0
@@ -7621,6 +7620,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67e47d9dbe9b12d49b5ffb9ee4a78928, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  finalScoreText: {fileID: 556806717}
   distanceMultiplier: 1
   nearMissBase: 50
   nearMissSpeedMultiplier: 2
@@ -9578,7 +9578,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1586159982
 RectTransform:
   m_ObjectHideFlags: 0

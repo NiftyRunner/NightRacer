@@ -1678,9 +1678,10 @@ MonoBehaviour:
   movementMultiplier: 5
   autoForce: 20
   maxSpinSpeed: 1000
-  bikeTiltTransform: {fileID: 1618796163}
-  baseXAngle: 90
-  maxTiltDelta: 10
+  accelerationRate: 0.2
+  maxSpeedMultiplier: 3
+  bikeAnimator: {fileID: 0}
+  riderAnimator: {fileID: 0}
   tiltSpeed: 0
 --- !u!54 &850028408
 Rigidbody:
@@ -2570,7 +2571,7 @@ GameObject:
   - component: {fileID: 1474559720}
   - component: {fileID: 1474559719}
   m_Layer: 5
-  m_Name: Upgrades
+  m_Name: Credits
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2615,7 +2616,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: UPGRADES
+  m_text: CREDITS
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c63a093c86403ba4b9c2d0bc1b9dcf6f, type: 2}
   m_sharedMaterial: {fileID: -6671559449618918854, guid: c63a093c86403ba4b9c2d0bc1b9dcf6f, type: 2}
@@ -4207,6 +4208,10 @@ PrefabInstance:
     - target: {fileID: 4934932390228229110, guid: 9b451806f5a67604c97a5b145a606987, type: 3}
       propertyPath: m_Name
       value: FadeCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 4934932390228229110, guid: 9b451806f5a67604c97a5b145a606987, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7109098705744586367, guid: 9b451806f5a67604c97a5b145a606987, type: 3}
       propertyPath: m_Pivot.x
