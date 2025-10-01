@@ -10,6 +10,7 @@ public class MenuCameraManager : MonoBehaviour
     [SerializeField] private List<CinemachineVirtualCamera>  _virtualCameras = new List<CinemachineVirtualCamera>();
     [SerializeField] private List<GameObject> texts = new List<GameObject>();
     [SerializeField] SceneLoader loader;
+    [SerializeField] TweenHandler creditTweenHandler;
 
     [SerializeField] string sceneToLoad;
     private GameObject currText;
@@ -26,6 +27,7 @@ public class MenuCameraManager : MonoBehaviour
     {
         PlayerControlHandler.OnEnterPressed += PlayerControlHandler_OnEnterPressed;
         PlayerControlHandler.OnLRValueChange += PlayerControlHandler_OnLRValueChange;
+        PlayerControlHandler.OnEscPressed += PlayerControlHandler_OnEscPressed;
         DollyDrive.OnDollyFinished += DollyDrive_OnDollyFinished;
     }
 
@@ -33,6 +35,7 @@ public class MenuCameraManager : MonoBehaviour
     {
         PlayerControlHandler.OnEnterPressed -= PlayerControlHandler_OnEnterPressed;
         PlayerControlHandler.OnLRValueChange -= PlayerControlHandler_OnLRValueChange;
+        PlayerControlHandler.OnEscPressed -= PlayerControlHandler_OnEscPressed;
         DollyDrive.OnDollyFinished -= DollyDrive_OnDollyFinished;
     }
 
@@ -77,9 +80,46 @@ public class MenuCameraManager : MonoBehaviour
 
     private void PlayerControlHandler_OnEnterPressed()
     {
+        if (inputEnabled) {
+            switch (_virtualCameraIndex) {
+                case 0:
+                    loader.CallLoadCoroutine(sceneToLoad);
+                    break;
+                case 1:
+                    creditTweenHandler.PlaySequence();
+                    currText.SetActive(false);
+                    break;
+                case 2:
+                    return;
+                case 3:
+                    Application.Quit();
+                    break;
+                default:
+                    return;
+            }
+        }
+
         if(_virtualCameraIndex == 0 && inputEnabled)
         {
             loader.CallLoadCoroutine(sceneToLoad);
+        }
+    }
+
+    private void PlayerControlHandler_OnEscPressed()
+    {
+        if (inputEnabled)
+        {
+            switch (_virtualCameraIndex)
+            {
+                case 0:
+                    return;
+                case 1:
+                    creditTweenHandler.PlaySequenceReverse();
+                    currText.SetActive(true);
+                    break;
+                default:
+                    return;
+            }
         }
     }
 
