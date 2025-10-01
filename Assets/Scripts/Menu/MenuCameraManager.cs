@@ -2,7 +2,6 @@ using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class MenuCameraManager : MonoBehaviour
 {
@@ -25,17 +24,35 @@ public class MenuCameraManager : MonoBehaviour
 
     private void OnEnable()
     {
+        //Touch Control Events
+        SwipeInput.OnSwipeLeft += LeftInput;
+        SwipeInput.OnSwipeRight += RightInput;
+        LeftRightScreenTouchInput.OnTouchRight += PlayerControlHandler_OnEnterPressed;
+        LeftRightScreenTouchInput.OnTouchLeft += PlayerControlHandler_OnEscPressed;
+
+        //Control Events
         PlayerControlHandler.OnEnterPressed += PlayerControlHandler_OnEnterPressed;
         PlayerControlHandler.OnLRValueChange += PlayerControlHandler_OnLRValueChange;
         PlayerControlHandler.OnEscPressed += PlayerControlHandler_OnEscPressed;
+        
+        //Dolly events
         DollyDrive.OnDollyFinished += DollyDrive_OnDollyFinished;
     }
 
     private void OnDisable()
     {
+        //Touch Control Events
+        SwipeInput.OnSwipeLeft -= LeftInput;
+        SwipeInput.OnSwipeRight -= RightInput;
+        LeftRightScreenTouchInput.OnTouchRight -= PlayerControlHandler_OnEnterPressed;
+        LeftRightScreenTouchInput.OnTouchLeft -= PlayerControlHandler_OnEscPressed;
+
+        //Control Events
         PlayerControlHandler.OnEnterPressed -= PlayerControlHandler_OnEnterPressed;
         PlayerControlHandler.OnLRValueChange -= PlayerControlHandler_OnLRValueChange;
         PlayerControlHandler.OnEscPressed -= PlayerControlHandler_OnEscPressed;
+        
+        //Dolly Events
         DollyDrive.OnDollyFinished -= DollyDrive_OnDollyFinished;
     }
 
@@ -55,20 +72,31 @@ public class MenuCameraManager : MonoBehaviour
         if (inputValues != 0) {
             if (inputValues < 0)
             {
-                if (_virtualCameraIndex == 0) return;
-
-                _virtualCameraIndex--;
-                SetVirtualCamera(_virtualCameraIndex);
-                StartCoroutine(StartWaitTimer());
+                LeftInput();
             }
-            else if (inputValues > 0) {
-                if(_virtualCameraIndex == (_virtualCameraCount - 1)) return;
-
-                _virtualCameraIndex++;
-                SetVirtualCamera(_virtualCameraIndex);
-                StartCoroutine(StartWaitTimer());
+            else if (inputValues > 0) 
+            {
+                RightInput();
             }
         }
+    }
+
+    private void LeftInput()
+    {
+        if (_virtualCameraIndex == 0) return;
+
+        _virtualCameraIndex--;
+        SetVirtualCamera(_virtualCameraIndex);
+        StartCoroutine(StartWaitTimer());
+    }
+
+    private void RightInput()
+    {
+        if (_virtualCameraIndex == (_virtualCameraCount - 1)) return;
+
+        _virtualCameraIndex++;
+        SetVirtualCamera(_virtualCameraIndex);
+        StartCoroutine(StartWaitTimer());
     }
 
     private IEnumerator StartWaitTimer()
