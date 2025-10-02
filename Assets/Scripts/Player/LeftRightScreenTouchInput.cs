@@ -1,4 +1,3 @@
-using GLTFast;
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem.EnhancedTouch;
@@ -9,7 +8,7 @@ public class LeftRightScreenTouchInput : MonoBehaviour
     public static event Action OnTouchRight;
     public static event Action OnTouchLeft;
 
-    private float touchInputValues;
+    private float touchInputValue;
 
     private void Awake()
     {
@@ -17,30 +16,41 @@ public class LeftRightScreenTouchInput : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
-        EnhancedTouchSupport.Disable();
+        // Don’t disable globally here unless this is your only input handler
+        // EnhancedTouchSupport.Disable();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        foreach (var touch in UnityEngine.InputSystem.EnhancedTouch.Touch.activeTouches)
+        float newValue = 0f;
+
+        // Take the *first active touch* (or the most recent one)
+        if (UnityEngine.InputSystem.EnhancedTouch.Touch.activeTouches.Count > 0)
         {
+            var touch = UnityEngine.InputSystem.EnhancedTouch.Touch.activeTouches[0];
+
             if (touch.isInProgress)
             {
                 if (touch.screenPosition.x > Screen.width / 2f)
                 {
-                    OnTouchRight?.Invoke(); //To detect touch
-                    touchInputValues = 1f;
+                    newValue = 1f;
+                    if (touchInputValue != 1f) OnTouchRight?.Invoke();
                 }
                 else
                 {
-                    OnTouchLeft?.Invoke();
-                    touchInputValues = -1f;
+                    newValue = -1f;
+                    if (touchInputValue != -1f) OnTouchLeft?.Invoke();
                 }
-                OnTouchValueChange?.Invoke(touchInputValues);
             }
+        }
+
+        // Only fire event if value changed
+        if (Math.Abs(newValue - touchInputValue) > 0.01f)
+        {
+            touchInputValue = newValue;
+            OnTouchValueChange?.Invoke(touchInputValue);
         }
     }
 }

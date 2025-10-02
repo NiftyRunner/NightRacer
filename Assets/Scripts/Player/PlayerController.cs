@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviour
     private void OnEnable()
     {
         PlayerControlHandler.OnLRValueChange += LeftRightValueSetter;
-        LeftRightScreenTouchInput.OnTouchValueChange += LeftRightValueSetter;
+        SwipeInput.OnTouchValueChange += LeftRightValueSetter;
         DollyDrive.OnDollyFinished += DollyDrive_OnDollyFinished;
         CollisionHandlerNew.OnPlayerCollision += CollisionHandlerNew_OnPlayerCollision;
     }
@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour
     private void OnDisable()
     {
         PlayerControlHandler.OnLRValueChange -= LeftRightValueSetter;
-        LeftRightScreenTouchInput.OnTouchValueChange -= LeftRightValueSetter;
+        SwipeInput.OnTouchValueChange -= LeftRightValueSetter;
         DollyDrive.OnDollyFinished -= DollyDrive_OnDollyFinished;
         CollisionHandlerNew.OnPlayerCollision -= CollisionHandlerNew_OnPlayerCollision;
     }

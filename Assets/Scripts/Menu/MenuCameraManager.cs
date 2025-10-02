@@ -28,8 +28,8 @@ public class MenuCameraManager : MonoBehaviour
         //Touch Control Events
         SwipeInput.OnSwipeLeft += LeftInput;
         SwipeInput.OnSwipeRight += RightInput;
-        LeftRightScreenTouchInput.OnTouchRight += PlayerControlHandler_OnEnterPressed;
-        LeftRightScreenTouchInput.OnTouchLeft += PlayerControlHandler_OnEscPressed;
+        SwipeInput.OnTapRight += PlayerControlHandler_OnEnterPressed;
+        SwipeInput.OnTapLeft += PlayerControlHandler_OnEscPressed;
 
         //Control Events
         PlayerControlHandler.OnEnterPressed += PlayerControlHandler_OnEnterPressed;
@@ -45,8 +45,8 @@ public class MenuCameraManager : MonoBehaviour
         //Touch Control Events
         SwipeInput.OnSwipeLeft -= LeftInput;
         SwipeInput.OnSwipeRight -= RightInput;
-        LeftRightScreenTouchInput.OnTouchRight -= PlayerControlHandler_OnEnterPressed;
-        LeftRightScreenTouchInput.OnTouchLeft -= PlayerControlHandler_OnEscPressed;
+        SwipeInput.OnTapRight -= PlayerControlHandler_OnEnterPressed;
+        SwipeInput.OnTapLeft -= PlayerControlHandler_OnEscPressed;
 
         //Control Events
         PlayerControlHandler.OnEnterPressed -= PlayerControlHandler_OnEnterPressed;
