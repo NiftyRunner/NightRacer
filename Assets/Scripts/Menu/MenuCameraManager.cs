@@ -21,6 +21,7 @@ public class MenuCameraManager : MonoBehaviour
     private float inputValues;
 
     private bool inputEnabled = false;
+    private bool selectedMenuActive = false;
 
     private void OnEnable()
     {
@@ -114,8 +115,10 @@ public class MenuCameraManager : MonoBehaviour
                     loader.CallLoadCoroutine(sceneToLoad);
                     break;
                 case 1:
+                    if (selectedMenuActive) return;
                     creditTweenHandler.PlaySequence();
                     currText.SetActive(false);
+                    selectedMenuActive = true;
                     break;
                 case 2:
                     return;
@@ -142,8 +145,10 @@ public class MenuCameraManager : MonoBehaviour
                 case 0:
                     return;
                 case 1:
+                    if(!selectedMenuActive) return;
                     creditTweenHandler.PlaySequenceReverse();
                     currText.SetActive(true);
+                    selectedMenuActive = false;
                     break;
                 default:
                     return;
