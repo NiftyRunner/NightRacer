@@ -21,6 +21,7 @@ public class MusicHandler : MonoBehaviour
     {
         playerSource.Stop();
         bgSource.Stop();
+        bgSource.loop = false;
         bgSource.clip = endClip;
         bgSource.Play();
     }
