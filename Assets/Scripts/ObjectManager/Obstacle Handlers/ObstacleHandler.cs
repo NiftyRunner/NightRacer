@@ -36,7 +36,7 @@ public class ObstacleHandler : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Left" || other.gameObject.tag == "Right") {
+        if (other.gameObject.CompareTag("Left") || other.gameObject.CompareTag("Right")) {
             objects.ReturnToPool(other.gameObject);
         }
     }

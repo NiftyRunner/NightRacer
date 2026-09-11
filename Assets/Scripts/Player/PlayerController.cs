@@ -81,7 +81,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag == "NextSeg")
+        if (other.gameObject.CompareTag("NextSeg"))
         {
             envManager.AdvanceSegment();
         }

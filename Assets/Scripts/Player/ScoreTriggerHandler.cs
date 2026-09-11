@@ -7,10 +7,9 @@ public class ScoreTriggerHandler : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Right" || other.gameObject.tag == "Left")
+        if(other.gameObject.CompareTag("Right") || other.gameObject.CompareTag("Left"))
         {
             float distance = Vector3.Distance(transform.position , other.transform.position);
-            Debug.Log(distance);
             if (distance < nearMissDistance) {
                 ScoreManager.Instance.AddNearMiss(controller.GetPlayerSpeed());
             }
