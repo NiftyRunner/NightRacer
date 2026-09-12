@@ -7443,13 +7443,16 @@ MonoBehaviour:
   - {fileID: 1650799521}
   - {fileID: 419716445}
   movementMultiplier: 5
-  autoForce: 20
+  autoForce: 25
   maxSpinSpeed: 1000
   accelerationRate: 0.2
   maxSpeedMultiplier: 2
+  maxLateralOffset: 5.5
   bikeAnimator: {fileID: 1618796168}
   riderAnimator: {fileID: 1009341130}
   tiltSpeed: 2
+  playerStartSpeed: 30
+  startSpeedMultiplier: 1.5
 --- !u!54 &850028408
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -8598,7 +8601,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1241203146}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2117970933}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -11740,6 +11743,19 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -6515312224896409169, guid: fed175e36f37b1d4fac3f729f6515629, type: 3}
   m_PrefabInstance: {fileID: 1852119256}
   m_PrefabAsset: {fileID: 0}
+--- !u!134 &2117970933
+PhysicsMaterial:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  serializedVersion: 2
+  m_DynamicFriction: 0.6
+  m_StaticFriction: 0.6
+  m_Bounciness: 0
+  m_FrictionCombine: 0
+  m_BounceCombine: 0
 --- !u!1 &2134114126
 GameObject:
   m_ObjectHideFlags: 0

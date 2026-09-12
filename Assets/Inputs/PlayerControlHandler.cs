@@ -17,6 +17,8 @@ public class PlayerControlHandler : MonoBehaviour
 
     private void OnEnable()
     {
+        if (playerInputActions == null) playerInputActions = new PlayerControls();
+
         playerInputActions.Enable();
 
         playerInputActions.Player.LR.performed += LR_performed;
@@ -28,6 +30,8 @@ public class PlayerControlHandler : MonoBehaviour
 
     private void OnDisable()
     {
+        if (playerInputActions == null) return;
+
         playerInputActions.Disable();
 
         playerInputActions.Player.LR.performed -= LR_performed;
