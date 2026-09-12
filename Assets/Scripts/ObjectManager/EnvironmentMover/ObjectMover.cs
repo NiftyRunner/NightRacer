@@ -13,11 +13,11 @@ public class ObjectMover : MonoBehaviour
     [SerializeField] private float wheelSpeed = 360f;
 
     [SerializeField] private float autoForce;
-    
+
     private bool isObstacle = false;
     private static bool movementEnabled = false;
 
-    
+    private Vector3[] wheelPivotLocalOffsets;
 
     public void SetAutoForce(float force) => autoForce = force;
 
@@ -38,6 +38,7 @@ public class ObjectMover : MonoBehaviour
     private void Start()
     {
         playerController = FindFirstObjectByType<PlayerController>();
+        CacheWheelPivotOffsets();
 
         if(this.gameObject.CompareTag("Left") || this.gameObject.CompareTag("Right"))
         {
@@ -47,6 +48,25 @@ public class ObjectMover : MonoBehaviour
 
         //movementEnabled = false;
         autoForce = setAutoForce;
+    }
+
+    private void CacheWheelPivotOffsets()
+    {
+        if (wheels == null) return;
+
+        wheelPivotLocalOffsets = new Vector3[wheels.Length];
+        for (int i = 0; i < wheels.Length; i++)
+        {
+            if (wheels[i] == null) continue;
+
+            var renderers = wheels[i].GetComponentsInChildren<Renderer>();
+            if (renderers.Length == 0) continue;
+
+            Bounds bounds = renderers[0].bounds;
+            foreach (var r in renderers) bounds.Encapsulate(r.bounds);
+
+            wheelPivotLocalOffsets[i] = wheels[i].InverseTransformPoint(bounds.center);
+        }
     }
 
     void Update()
@@ -93,9 +113,16 @@ public class ObjectMover : MonoBehaviour
 
         //float spinRate = Mathf.Lerp(0f, maxSpinSpeed, spline.MaxSpeed / environmentSpeed);
         float deltaAngle = wheelSpeed * Time.deltaTime;
-        foreach (var w in wheels)
+        for (int i = 0; i < wheels.Length; i++)
         {
-            w.Rotate(deltaAngle, 0f, 0f, Space.Self);
+            var w = wheels[i];
+            if (w == null) continue;
+
+            Vector3 pivotWorld = (wheelPivotLocalOffsets != null && i < wheelPivotLocalOffsets.Length)
+                ? w.TransformPoint(wheelPivotLocalOffsets[i])
+                : w.position;
+
+            w.RotateAround(pivotWorld, w.right, deltaAngle);
         }
     }
 
