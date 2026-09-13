@@ -21,6 +21,7 @@ public class RagdollControllerNew : MonoBehaviour
     private float t = 0f;
     private float ragdollForce;
     private Animator riderAnimator;
+    private Collider bikeCollider;
 
     private bool ragdollEnabled = false;
     private bool startZoom = false;
@@ -44,6 +45,17 @@ public class RagdollControllerNew : MonoBehaviour
 
         riderTransform = rider.GetComponent<Transform>();
         riderAnimator = rider.GetComponent<Animator>();
+
+        var bikeParent = GameObject.Find("BikeParent");
+        bikeCollider = bikeParent != null ? bikeParent.GetComponent<Collider>() : null;
+
+        // Ragdoll bones should stay kinematic (purely animated) until a crash triggers
+        // EnableRagdoll(true) — this was never initialized before, so they were non-kinematic
+        // and physically simulated from the very start of the game.
+        foreach (Rigidbody rb in rider.GetComponentsInChildren<Rigidbody>())
+        {
+            rb.isKinematic = true;
+        }
     }
 
     private void Update()
@@ -73,9 +85,23 @@ public class RagdollControllerNew : MonoBehaviour
     {
         riderAnimator.enabled = !enabled;
 
-        foreach (Rigidbody rb in GetComponentsInChildren<Rigidbody>())
+        // Scoped to the rider's own bones — this used to scan the whole Character hierarchy,
+        // which also toggled the player's own root Rigidbody (breaking normal movement).
+        foreach (Rigidbody rb in rider.GetComponentsInChildren<Rigidbody>())
         {
             rb.isKinematic = !enabled;
+        }
+
+        // The rider's bones normally ignore collision with the bike (PlayerController sets
+        // this up so the bike doesn't self-collide with its own rider during gameplay). Once
+        // ragdoll actually activates, restore that collision so the body realistically reacts
+        // to hitting the bike instead of passing through it.
+        if (bikeCollider != null)
+        {
+            foreach (Collider riderCollider in rider.GetComponentsInChildren<Collider>(true))
+            {
+                Physics.IgnoreCollision(bikeCollider, riderCollider, !enabled);
+            }
         }
 
         ragCamera.Priority = 20;

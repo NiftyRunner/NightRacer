@@ -77,13 +77,19 @@ public class PlayerController : MonoBehaviour
     // with the player. One-time setup: road segments are pooled/reused, not endlessly created.
     private void IgnoreSelfCollisions()
     {
-        var playerColliders = GetComponentsInChildren<Collider>(true);
+        var riderColliders = riderAnimator.GetComponentsInChildren<Collider>(true);
+        var riderColliderSet = new System.Collections.Generic.HashSet<Collider>(riderColliders);
 
-        foreach (var riderCollider in riderAnimator.GetComponentsInChildren<Collider>(true))
+        // Only the bike/character's own colliders — excludes the rider's own ragdoll bones,
+        // which must stay able to collide with the bike and road once a crash triggers ragdoll
+        // physics (RagdollControllerNew restores that collision when it activates).
+        var bikeColliders = System.Array.FindAll(GetComponentsInChildren<Collider>(true), c => !riderColliderSet.Contains(c));
+
+        foreach (var riderCollider in riderColliders)
         {
-            foreach (var playerCollider in playerColliders)
+            foreach (var bikeCollider in bikeColliders)
             {
-                if (playerCollider != riderCollider) Physics.IgnoreCollision(playerCollider, riderCollider);
+                Physics.IgnoreCollision(bikeCollider, riderCollider);
             }
         }
 
@@ -99,9 +105,9 @@ public class PlayerController : MonoBehaviour
 
             foreach (var roadCollider in roadsGroup.GetComponentsInChildren<Collider>(true))
             {
-                foreach (var playerCollider in playerColliders)
+                foreach (var bikeCollider in bikeColliders)
                 {
-                    Physics.IgnoreCollision(playerCollider, roadCollider);
+                    Physics.IgnoreCollision(bikeCollider, roadCollider);
                 }
             }
         }
