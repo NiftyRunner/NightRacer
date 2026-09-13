@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -19,6 +20,8 @@ public class PlayerController : MonoBehaviour
 
     private float movementValues;
     private float currentTilt;
+    private Quaternion bikeRestWorldRotation;
+    private Quaternion riderRestWorldRotation;
 
     private Rigidbody rb;
 
@@ -58,6 +61,44 @@ public class PlayerController : MonoBehaviour
         rb.useGravity = false;
         rb.constraints |= RigidbodyConstraints.FreezePositionY;
         rb.interpolation = RigidbodyInterpolation.Interpolate;
+
+        bikeRestWorldRotation = bikeAnimator.transform.rotation;
+        riderRestWorldRotation = riderAnimator.transform.rotation;
+        riderAnimator.enabled = false;
+
+        IgnoreSelfCollisions();
+    }
+
+    // Now that movement is driven by real physics velocity, real overlaps generate real
+    // collision response that fights the intended velocity. The rider's own ragdoll bone
+    // colliders naturally overlap the bike (sitting on it), and the road segments' surface
+    // colliders naturally overlap the player (Y is frozen, not resting cleanly on top) — both
+    // are expected geometry overlap, not a real hit, so they must never physically collide
+    // with the player. One-time setup: road segments are pooled/reused, not endlessly created.
+    private void IgnoreSelfCollisions()
+    {
+        var playerColliders = GetComponentsInChildren<Collider>(true);
+
+        foreach (var riderCollider in riderAnimator.GetComponentsInChildren<Collider>(true))
+        {
+            foreach (var playerCollider in playerColliders)
+            {
+                if (playerCollider != riderCollider) Physics.IgnoreCollision(playerCollider, riderCollider);
+            }
+        }
+
+        foreach (var root in SceneManager.GetActiveScene().GetRootGameObjects())
+        {
+            if (!root.CompareTag("NextSeg")) continue;
+
+            foreach (var roadCollider in root.GetComponentsInChildren<Collider>(true))
+            {
+                foreach (var playerCollider in playerColliders)
+                {
+                    Physics.IgnoreCollision(playerCollider, roadCollider);
+                }
+            }
+        }
     }
 
     private void LeftRightValueSetter(float inputValues)
@@ -97,18 +138,22 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // rb is non-kinematic (required so OnCollisionEnter fires against the kinematic obstacle
+    // rigidbodies), so it must be driven by setting velocity and letting the physics engine
+    // integrate motion itself. Directly overwriting the Transform every frame (Translate or
+    // MovePosition, tried both) fights the physics engine's own tracking of this body and is
+    // what caused the persistent jitter — this is the actual fix, not another position hack.
     private void MovePlayer()
     {
-        if(!inputEnabled) movementValues = 0;
+        if (!inputEnabled) movementValues = 0;
 
-        Vector3 movementForce = new Vector3(
-            movementValues * movementMultiplier * Time.deltaTime, 0, autoForce*Time.deltaTime
-            );
+        float lateralVelocity = movementValues * movementMultiplier;
 
-        Vector3 targetPosition = transform.position + movementForce;
-        targetPosition.x = Mathf.Clamp(targetPosition.x, -maxLateralOffset, maxLateralOffset);
+        // Soft wall: block further travel past the clamp, but still allow moving back toward center.
+        if (transform.position.x >= maxLateralOffset && lateralVelocity > 0) lateralVelocity = 0;
+        if (transform.position.x <= -maxLateralOffset && lateralVelocity < 0) lateralVelocity = 0;
 
-        rb.MovePosition(targetPosition);
+        rb.linearVelocity = new Vector3(lateralVelocity, 0, autoForce);
     }
 
     private void TiltPlayer()
@@ -116,7 +161,14 @@ public class PlayerController : MonoBehaviour
         currentTilt = Mathf.Lerp(currentTilt, movementValues, tiltSpeed * Time.deltaTime);
 
         bikeAnimator.SetFloat("Tilt", currentTilt);
-        riderAnimator.SetFloat("Tilt", currentTilt);
+    }
+
+    // Runs after Mecanim has applied this frame's Tilt pose to the bike, so we can mirror
+    // its exact world-space rotation delta onto the rider instead of guessing a local axis.
+    private void LateUpdate()
+    {
+        Quaternion worldDelta = bikeAnimator.transform.rotation * Quaternion.Inverse(bikeRestWorldRotation);
+        riderAnimator.transform.rotation = worldDelta * riderRestWorldRotation;
     }
 
 
