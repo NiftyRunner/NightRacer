@@ -91,7 +91,13 @@ public class PlayerController : MonoBehaviour
         {
             if (!root.CompareTag("NextSeg")) continue;
 
-            foreach (var roadCollider in root.GetComponentsInChildren<Collider>(true))
+            // Only the "Roads" subgroup holds the solid road-surface colliders. The root's own
+            // trigger collider is the segment-boundary trigger OnTriggerExit relies on to call
+            // envManager.AdvanceSegment() — it must never be included here.
+            var roadsGroup = root.transform.Find("Roads");
+            if (roadsGroup == null) continue;
+
+            foreach (var roadCollider in roadsGroup.GetComponentsInChildren<Collider>(true))
             {
                 foreach (var playerCollider in playerColliders)
                 {
